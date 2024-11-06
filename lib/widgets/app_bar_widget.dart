@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final bool centerTitle;
-  final String title;
+  final String? title;
+  final Widget? titleWidget;
   final Icon? leadingIcon;
   final VoidCallback? onLeadingTap;
   final List<Widget>? actions;
 
   const AppBarWidget({
     super.key,
-    required this.title,
+    this.title,
     this.leadingIcon,
     this.onLeadingTap,
     this.actions,
     this.centerTitle = true,
+    this.titleWidget,
   });
 
   get _leading {
@@ -27,8 +30,8 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: centerTitle,
-      leading: _leading,
-      title: Text(title),
+      leading: Get.previousRoute.isNotEmpty ? _leading : null,
+      title: titleWidget ?? Text(title ?? ""),
       actions: actions,
     );
   }

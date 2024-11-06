@@ -1,6 +1,7 @@
 import 'package:chat_message/utils/wechat_date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/pages/message_detail/message_detail_controller.dart';
+import 'package:flutter_chatgpt/widgets/app_bar_widget.dart';
 import 'package:get/get.dart';
 
 class MessageDetailPage extends GetView<MessageDetailController> {
@@ -44,9 +45,8 @@ class MessageDetailPage extends GetView<MessageDetailController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: _titleView(),
+      appBar: AppBarWidget(
+        titleWidget: _titleView(),
       ),
       body: _listView(context),
     );
