@@ -210,13 +210,13 @@ class ThemeConfig extends GetxController {
     }
 
     if (theme != AppThemeMode.dark) {
-      themeData.copyWith(extensions: [
+      themeData = themeData.copyWith(extensions: [
         AppColorsTheme.light(),
         AppTextsTheme.main(),
         AppDimensionsTheme.main(View.of(_context!))
       ]);
     } else {
-      themeData.copyWith(extensions: [
+      themeData = themeData.copyWith(extensions: [
         AppColorsTheme.light(),
         AppTextsTheme.main(),
         AppDimensionsTheme.main(View.of(_context!))
