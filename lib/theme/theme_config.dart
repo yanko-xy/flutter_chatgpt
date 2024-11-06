@@ -217,7 +217,7 @@ class ThemeConfig extends GetxController {
       ]);
     } else {
       themeData = themeData.copyWith(extensions: [
-        AppColorsTheme.light(),
+        AppColorsTheme.dark(),
         AppTextsTheme.main(),
         AppDimensionsTheme.main(View.of(_context!))
       ]);
@@ -247,6 +247,10 @@ class ThemeConfig extends GetxController {
 
   static AppThemeMode get themeMode {
     return _themeMode!;
+  }
+
+  static ThemeData get theme {
+    return _theme!;
   }
 
   // 获取主题

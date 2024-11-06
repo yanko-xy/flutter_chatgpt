@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/pages/my/my_controller.dart';
 import 'package:flutter_chatgpt/pages/my/widgets/header_widget.dart';
+import 'package:flutter_chatgpt/theme/theme_config.dart';
 import 'package:flutter_chatgpt/theme/themedata_extension.dart';
 import 'package:get/get.dart';
 
@@ -12,14 +13,18 @@ class MyPage extends GetView<MyController> {
       onPressed: controller.changeTheme,
       style: ButtonStyle(
           backgroundColor: WidgetStatePropertyAll(
-        Theme.of(context).appColors.backgroundDefault,
+        ThemeConfig.theme.appColors.backgroundDefault,
       )),
-      child: const Text("改变主题"),
+      child: Text(
+        "改变主题",
+        style: TextStyle(color: ThemeConfig.theme.appColors.textDefault),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return Scaffold(
       body: Column(
         children: [

@@ -31,10 +31,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: themeConfig.getTheme(),
+        future: themeConfig.getTheme(context: context),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            debugPrint((snapshot.data as ThemeData).toString());
             return GetMaterialApp(
               title: 'Flutter Demo',
               theme: snapshot.data as ThemeData,
