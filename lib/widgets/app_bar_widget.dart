@@ -33,10 +33,14 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: centerTitle,
-      leading: Get.previousRoute.isNotEmpty ? _leading : null,
+      leading: !_isFirstPage() ? _leading : null,
       title: titleWidget ?? Text(title ?? ""),
       actions: actions,
     );
+  }
+
+  _isFirstPage() {
+    return Get.previousRoute.isEmpty || Get.previousRoute == "/" || Get.currentRoute == "/";
   }
 
   @override
