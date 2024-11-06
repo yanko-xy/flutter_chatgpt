@@ -21,10 +21,6 @@ class MyController extends GetxController {
   }
 
   void changeTheme() {
-    if (ThemeConfig.themeMode == AppThemeMode.light) {
-      ThemeConfig.changeTheme(themeMode: AppThemeMode.dark);
-    } else {
-      ThemeConfig.changeTheme(themeMode: AppThemeMode.light);
-    }
+    ThemeConfig.changeTheme(themeMode: AppThemeMode.system);
   }
 }

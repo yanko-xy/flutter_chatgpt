@@ -231,7 +231,7 @@ class ThemeConfig extends GetxController {
   }
 
   static ThemeData _getSystemTheme() {
-    Brightness currentBrightness = Theme.of(_context!).brightness;
+    Brightness currentBrightness = MediaQuery.of(_context!).platformBrightness;
     if (currentBrightness == Brightness.light) {
       return getThemeData(AppThemeMode.light);
     } else {
