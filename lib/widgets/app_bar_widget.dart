@@ -21,7 +21,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
   get _leading {
     return InkWell(
-      onTap: onLeadingTap,
+      onTap: () {
+        if (onLeadingTap != null) onLeadingTap!();
+        Get.back();
+      },
       child: leadingIcon ?? const Icon(Icons.arrow_back_ios_new),
     );
   }
