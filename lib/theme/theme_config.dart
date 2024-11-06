@@ -209,6 +209,10 @@ class ThemeConfig extends GetxController {
         break;
     }
 
+    if (theme == AppThemeMode.system) {
+       return _getSystemTheme();
+    }
+
     if (theme != AppThemeMode.dark) {
       themeData = themeData.copyWith(extensions: [
         AppColorsTheme.light(),
@@ -226,7 +230,16 @@ class ThemeConfig extends GetxController {
     return themeData;
   }
 
-  Future<ThemeData> init() async {
+  static ThemeData _getSystemTheme() {
+    Brightness currentBrightness = Theme.of(_context!).brightness;
+    if (currentBrightness == Brightness.light) {
+      return getThemeData(AppThemeMode.light);
+    } else {
+      return getThemeData(AppThemeMode.dark);
+    }
+  }
+
+  static Future<ThemeData> init() async {
     if (_context == null) {
       throw "please set context when first use getTheme";
     }
@@ -241,7 +254,6 @@ class ThemeConfig extends GetxController {
     await XYStoreage.write(key: keyThemeColor, value: getThemeName(themeMode));
     _theme = getThemeData(themeMode);
     _themeMode = themeMode;
-
     Get.changeTheme(_theme!);
   }
 
@@ -254,7 +266,7 @@ class ThemeConfig extends GetxController {
   }
 
   // 获取主题
-  Future<ThemeData> getTheme({BuildContext? context}) async {
+  static Future<ThemeData> getTheme({BuildContext? context}) async {
     if (context != null) _context = context;
     _theme ??= (await init());
     debugPrint(_theme.toString());

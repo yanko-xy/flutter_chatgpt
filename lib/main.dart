@@ -25,13 +25,11 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final ThemeConfig themeConfig = Get.put<ThemeConfig>(ThemeConfig());
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: themeConfig.getTheme(context: context),
+        future: ThemeConfig.getTheme(context: context),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return GetMaterialApp(
