@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chatgpt/utils/xy_storage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
 class ThemeConfig extends GetxController {
-  final themeStorage = const FlutterSecureStorage();
   static const keyThemeColor = "theme_color";
   static const themes = [
     "blue",
@@ -25,88 +25,102 @@ class ThemeConfig extends GetxController {
     "grey",
   ];
 
-  MaterialColor? _themeColor;
+  static ThemeData? _theme;
+  static String? _themeMode;
 
   // 获取主题模型
-  static MaterialColor getThemeColor(String? theme) {
-    MaterialColor color;
+  static ThemeData getThemeData(String? theme) {
+    ThemeData themeData;
     switch (theme) {
       case 'blue':
-        color = Colors.blue;
+        themeData = ThemeData(colorSchemeSeed: Colors.blue, useMaterial3: true);
         break;
       case 'red':
-        color = Colors.red;
+        themeData = ThemeData(colorSchemeSeed: Colors.red, useMaterial3: true);
         break;
       case 'deepPurple':
-        color = Colors.deepPurple;
+        themeData = ThemeData(colorSchemeSeed: Colors.deepPurple, useMaterial3: true);
         break;
       case 'indigo':
-        color = Colors.indigo;
+        themeData = ThemeData(colorSchemeSeed: Colors.indigo, useMaterial3: true);
         break;
       case 'lightBlue':
-        color = Colors.lightBlue;
+        themeData = ThemeData(colorSchemeSeed: Colors.lightBlue, useMaterial3: true);
         break;
       case 'cyan':
-        color = Colors.cyan;
+        themeData = ThemeData(colorSchemeSeed: Colors.cyan, useMaterial3: true);
         break;
       case 'teal':
-        color = Colors.teal;
+        themeData = ThemeData(colorSchemeSeed: Colors.teal, useMaterial3: true);
         break;
       case 'purple':
-        color = Colors.purple;
+        themeData = ThemeData(colorSchemeSeed: Colors.purple, useMaterial3: true);
         break;
       case 'green':
-        color = Colors.green;
+        themeData = ThemeData(colorSchemeSeed: Colors.green, useMaterial3: true);
         break;
       case 'lightGreen':
-        color = Colors.lightGreen;
+        themeData = ThemeData(colorSchemeSeed: Colors.lightGreen, useMaterial3: true);
         break;
       case 'lime':
-        color = Colors.lime;
+        themeData = ThemeData(colorSchemeSeed: Colors.lime, useMaterial3: true);
         break;
       case 'yellow':
-        color = Colors.yellow;
+        themeData = ThemeData(colorSchemeSeed: Colors.yellow, useMaterial3: true);
         break;
       case 'amber':
-        color = Colors.amber;
+        themeData = ThemeData(colorSchemeSeed: Colors.amber, useMaterial3: true);
         break;
       case 'orange':
-        color = Colors.orange;
+        themeData = ThemeData(colorSchemeSeed: Colors.orange, useMaterial3: true);
         break;
       case 'deepOrange':
-        color = Colors.deepOrange;
+        themeData = ThemeData(colorSchemeSeed: Colors.deepOrange, useMaterial3: true);
         break;
       case 'brown':
-        color = Colors.brown;
+        themeData = ThemeData(colorSchemeSeed: Colors.brown, useMaterial3: true);
         break;
       case 'grey':
-        color = Colors.grey;
+        themeData = ThemeData(colorSchemeSeed: Colors.grey, useMaterial3: true);
         break;
       case 'pink':
-        color = Colors.pink;
+        themeData = ThemeData(colorSchemeSeed: Colors.pink, useMaterial3: true);
         break;
       default:
-        color = Colors.blue;
+        themeData = ThemeData(colorSchemeSeed: Colors.blue, useMaterial3: true);
         break;
     }
-    return color;
+    return themeData;
   }
 
-  Future<MaterialColor> init() async {
-    String? theme = await themeStorage.read(key: keyThemeColor);
-    return getThemeColor(theme ?? "pink");
+  Future<ThemeData> init() async {
+    String? theme = await XYStoreage.read(key: keyThemeColor);
+    _theme = getThemeData(theme ?? "blue");
+    _themeMode = theme ?? "blue";
+    return _theme!;
   }
 
-  // 设置主题
-  void setTheme({required String colorName}) {
-    themeStorage.write(key: keyThemeColor, value: colorName);
-    _themeColor = getThemeColor(colorName);
+  // 改变主题
+  static void changeTheme({required String themeMode}) async {
+    await XYStoreage.write(key: keyThemeColor, value: themeMode);
+    _theme = getThemeData(themeMode);
+    _themeMode = themeMode;
+
+    Get.changeTheme(_theme!);
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Get.forceAppUpdate();
+    });
+  }
+
+  static String getThemeMode() {
+    return _themeMode!;
   }
 
   // 获取主题
   Future<ThemeData> getTheme() async {
-    _themeColor ??= (await init());
-    debugPrint(_themeColor.toString());
-    return ThemeData(colorSchemeSeed: _themeColor, useMaterial3: true);
+    _theme ??= (await init());
+    debugPrint(_theme.toString());
+    return _theme!;
   }
 }

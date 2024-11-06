@@ -6,6 +6,7 @@ import 'package:flutter_chatgpt/lang/language.dart';
 import 'package:flutter_chatgpt/pages/bottom_navigator.dart';
 import 'package:flutter_chatgpt/router/route_config.dart';
 import 'package:flutter_chatgpt/theme/theme_config.dart';
+import 'package:flutter_chatgpt/utils/xy_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:login_sdk/dao/login_dao.dart';
 import 'package:login_sdk/login_sdk.dart';
@@ -16,6 +17,8 @@ import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() {
+  // 初始话本地仓库
+  XYStoreage.init();
   runApp(MyApp());
 }
 
@@ -43,8 +46,7 @@ class MyApp extends StatelessWidget {
               getPages: RouteConfig.routes,
               home: FutureBuilder(
                   future: doInit(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<void> snapshot) {
+                  builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (LoginDao.getBoardingPass() == null) {
                         return const LoginPage();
@@ -67,10 +69,8 @@ class MyApp extends StatelessWidget {
   }
 
   Future<void> doInit() async {
-
-    await LoginConfig.instance().init(
-        homePage: const BottomNavigator(),
-        goHomeFn: () => Get.offNamed("home"));
+    await LoginConfig.instance()
+        .init(homePage: const BottomNavigator(), goHomeFn: () => Get.offNamed("home"));
     await dotenv.load(fileName: ".env");
 
     AIConfigBuilder.init(dotenv.env['BASE_URL']!);

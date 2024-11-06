@@ -6,11 +6,21 @@ import 'package:get/get.dart';
 class MyPage extends GetView<MyController> {
   const MyPage({super.key});
 
+  get _themeBtn {
+    return ElevatedButton(
+      onPressed: controller.changeTheme,
+      child: const Text("改变主题"),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Column(
-        children: [HeaderWidget()],
+        children: [
+          const HeaderWidget(),
+          _themeBtn,
+        ],
       ),
     );
   }
