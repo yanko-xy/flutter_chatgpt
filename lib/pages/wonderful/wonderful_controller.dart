@@ -3,13 +3,16 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_chatgpt/db/favorite_dao.dart';
 import 'package:flutter_chatgpt/db/xy_db_manager.dart';
 import 'package:flutter_chatgpt/models/favorite_model.dart';
+import 'package:flutter_chatgpt/stores/wonderful_store.dart';
 import 'package:flutter_chatgpt/utils/xy_dialog.dart';
 import 'package:flutter_chatgpt/utils/xy_utils.dart';
 import 'package:get/get.dart';
 
 class WonderfulController extends GetxController {
   late FavoriteDao favoriteDao;
-  RxList<FavoriteModel> favoriteList = RxList([]);
+
+  final WonderfulStore wonderfulStore = Get.find<WonderfulStore>();
+  RxList<FavoriteModel> get favoriteList => wonderfulStore.favoriteList;
 
   @override
   void onInit() {
@@ -29,17 +32,16 @@ class WonderfulController extends GetxController {
     super.onClose();
   }
 
-
-
   void _doInit() async {
-    var dbManager = await XYDBManager.instance(dbName: XYDBManager.getAccountHash());
+    var dbManager =
+        await XYDBManager.instance(dbName: XYDBManager.getAccountHash());
     favoriteDao = FavoriteDao(dbManager);
     _loadData();
   }
 
   void _loadData() async {
     var list = await favoriteDao.getFavoriteList();
-    favoriteList.assignAll(list);
+    wonderfulStore.favoriteList.assignAll(list);
   }
 
   void onLongPress(FavoriteModel model, BuildContext ancestor) {
@@ -64,14 +66,16 @@ class WonderfulController extends GetxController {
   }
 
   void jumpToDetail(FavoriteModel model, BuildContext ancestor) {
-    // TODO:
+    Get.toNamed("message_detail", arguments: {
+      "favoriteModel": model,
+    });
   }
 
   _onDelete(FavoriteModel model) async {
     var result = await favoriteDao.removeFavorite(model);
     var showText = "";
     if (result != null && result > 0) {
-      favoriteList.remove(model);
+      wonderfulStore.favoriteList.remove(model);
       showText = "删除成功";
     } else {
       showText = "删除失败";

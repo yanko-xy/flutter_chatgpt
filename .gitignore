@@ -9,7 +9,7 @@
 .history
 .svn/
 .env
-.env.dev
+.env
 .env.prod
 migrate_working_dir/
 

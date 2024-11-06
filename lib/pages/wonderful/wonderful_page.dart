@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chatgpt/controllers/wonderful_controller.dart';
+import 'package:flutter_chatgpt/pages/wonderful/wonderful_controller.dart';
 import 'package:flutter_chatgpt/widgets/favorite_widget.dart';
 import 'package:get/get.dart';
 

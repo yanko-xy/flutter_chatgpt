@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chatgpt/controllers/conversation_list_controller.dart';
+import 'package:flutter_chatgpt/pages/conversation_list/conversation_list_controller.dart';
 import 'package:get/get.dart';
 
 class ConversationListPage extends GetView<ConversationListController> {

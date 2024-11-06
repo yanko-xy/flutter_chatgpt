@@ -4,10 +4,12 @@ import 'package:chat_message/core/chat_controller.dart';
 import 'package:chat_message/models/message_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_chatgpt/pages/wonderful/wonderful_controller.dart';
 import 'package:flutter_chatgpt/dao/completion_dao.dart';
 import 'package:flutter_chatgpt/db/favorite_dao.dart';
 import 'package:flutter_chatgpt/db/xy_db_manager.dart';
 import 'package:flutter_chatgpt/models/favorite_model.dart';
+import 'package:flutter_chatgpt/stores/wonderful_store.dart';
 import 'package:flutter_chatgpt/utils/xy_dialog.dart';
 import 'package:flutter_chatgpt/utils/xy_utils.dart';
 import 'package:get/get.dart';
@@ -43,6 +45,8 @@ class ConversationController extends GetxController {
   late Map<String, dynamic> userInfo;
   final ScrollController _scrollController = ScrollController();
 
+  final WonderfulStore wonderfulStore = Get.find<WonderfulStore>();
+
   String get title => sendBtnEnable ? "与xy的会话" : "对方正在输入...";
 
   @override
@@ -75,12 +79,14 @@ class ConversationController extends GetxController {
 
     // 下拉出发加载更多
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         _loadData(loadMore: true);
       }
     });
 
-    var dbManager = await XYDBManager.instance(dbName: XYDBManager.getAccountHash());
+    var dbManager = await XYDBManager.instance(
+        dbName: XYDBManager.getAccountHash());
     messageDao = MessageDao(dbManager, cid: conversationModel.cid);
     favoriteDao = FavoriteDao(dbManager);
     var list = await _loadData();
@@ -114,7 +120,8 @@ class ConversationController extends GetxController {
   // 不用inputMessage是因为在结果回来之前, iputMessage可能会变
   void onSend(final String inputMessage) async {
     conversationModel.hadChanged = true;
-    _addMessage(_genMessageModel(ownerType: OwnerType.sender, message: inputMessage));
+    _addMessage(
+        _genMessageModel(ownerType: OwnerType.sender, message: inputMessage));
     sendBtnEnable = false;
     String? response = "";
     try {
@@ -126,7 +133,8 @@ class ConversationController extends GetxController {
       AILogger.log(e.toString());
     }
     response ??= "no response";
-    _addMessage(_genMessageModel(ownerType: OwnerType.receiver, message: response));
+    _addMessage(
+        _genMessageModel(ownerType: OwnerType.receiver, message: response));
     sendBtnEnable = true;
     update();
   }
@@ -140,7 +148,8 @@ class ConversationController extends GetxController {
     }
   }
 
-  MessageModel _genMessageModel({required OwnerType ownerType, required String message}) {
+  MessageModel _genMessageModel(
+      {required OwnerType ownerType, required String message}) {
     String avatar, ownerName;
     if (ownerType == OwnerType.sender) {
       avatar = userInfo["avatar"];
@@ -152,7 +161,9 @@ class ConversationController extends GetxController {
     return MessageModel(
         ownerType: ownerType,
         content: message,
-        createdAt: DateTime.now().millisecondsSinceEpoch,
+        createdAt: DateTime
+            .now()
+            .millisecondsSinceEpoch,
         avatar: avatar,
         ownerName: ownerName);
   }
@@ -205,21 +216,23 @@ class ConversationController extends GetxController {
   }
 
   void _addFavorite(MessageModel message) async {
-    var result = await favoriteDao.addFavorite(FavoriteModel(
+    var favoriteModel = FavoriteModel(
       content: message.content,
       createdAt: message.createdAt,
       ownerName: message.ownerName,
-    ));
+    );
+    var result = await favoriteDao.addFavorite(favoriteModel);
     var showText = "";
     if (result != null && result > 0) {
       showText = "收藏成功";
+      wonderfulStore.favoriteList.insert(0, favoriteModel);
     } else {
       showText = "收藏失败";
     }
     XYDialog.showSnackBar(message: showText);
   }
 
-  void _copyMessage(MessageModel message)  {
+  void _copyMessage(MessageModel message) {
     XYUtils.copyMessage(message.content);
   }
 

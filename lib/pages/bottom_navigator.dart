@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chatgpt/pages/conversation_list_page.dart';
+import 'package:flutter_chatgpt/pages/conversation_list/conversation_list_page.dart';
 import 'package:flutter_chatgpt/pages/demo_page.dart';
-import 'package:flutter_chatgpt/pages/my_page.dart';
+import 'package:flutter_chatgpt/pages/my/my_page.dart';
 import 'package:flutter_chatgpt/pages/study_page.dart';
-import 'package:flutter_chatgpt/pages/wonderful_page.dart';
+import 'package:flutter_chatgpt/pages/wonderful/wonderful_page.dart';
 import 'package:login_sdk/utils/navigator_util.dart';
 
 class BottomNavigator extends StatefulWidget {
